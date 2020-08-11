@@ -16,11 +16,10 @@ protocol CommandLineCommand {
 
 struct CommandLineManager {
     
-    @discardableResult
-    func executeCommand(_ command: CommandLineCommand) -> String {
+    @discardableResult func executeCommand(_ command: String) -> String {
         let task = Process()
         task.launchPath = "/bin/sh"
-        task.arguments = ["-c", command.stringValue]
+        task.arguments = ["-l", "-c", command]
         let pipe = Pipe()
         task.standardOutput = pipe
         task.launch()
@@ -28,7 +27,12 @@ struct CommandLineManager {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         return String(data: data, encoding: .utf8)?.droppingFinalCharacter ?? ""
     }
+}
 
+extension CommandLineManager {
+    @discardableResult func executeCommand(_ command: CommandLineCommand) -> String {
+        executeCommand(command.stringValue)
+    }
 }
 
 private extension String {

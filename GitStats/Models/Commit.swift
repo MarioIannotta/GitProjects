@@ -9,7 +9,7 @@
 import Foundation
 
 struct Commit {
-    var app = ""
+    let app: String
     let hash: String
     let author: String
     let date: String
