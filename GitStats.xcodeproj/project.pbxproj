@@ -13,6 +13,10 @@
 		AC4B49932420EF0700C297B3 /* Commit.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4B49922420EF0700C297B3 /* Commit.swift */; };
 		AC4B499524210A6D00C297B3 /* Contribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4B499424210A6D00C297B3 /* Contribution.swift */; };
 		AC4B49982421105D00C297B3 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = AC4B49972421105D00C297B3 /* ArgumentParser */; };
+		D38EEAE724E2D93C004F0777 /* FetchContributions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EEAE624E2D93C004F0777 /* FetchContributions.swift */; };
+		D38EEAE924E2D943004F0777 /* PodUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EEAE824E2D943004F0777 /* PodUpdate.swift */; };
+		D38EEAEE24E2DDDB004F0777 /* ReposCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EEAED24E2DDDB004F0777 /* ReposCommand.swift */; };
+		D38EEAF024E2DE66004F0777 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38EEAEF24E2DE66004F0777 /* Repository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +38,10 @@
 		AC4B498D2420E49600C297B3 /* CommandLineManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandLineManager.swift; sourceTree = "<group>"; };
 		AC4B49922420EF0700C297B3 /* Commit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Commit.swift; sourceTree = "<group>"; };
 		AC4B499424210A6D00C297B3 /* Contribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contribution.swift; sourceTree = "<group>"; };
+		D38EEAE624E2D93C004F0777 /* FetchContributions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchContributions.swift; sourceTree = "<group>"; };
+		D38EEAE824E2D943004F0777 /* PodUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodUpdate.swift; sourceTree = "<group>"; };
+		D38EEAED24E2DDDB004F0777 /* ReposCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposCommand.swift; sourceTree = "<group>"; };
+		D38EEAEF24E2DE66004F0777 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				AC4B49842420E45D00C297B3 /* main.swift */,
+				D38EEADD24E1828A004F0777 /* Commands */,
 				AC4B498B2420E49600C297B3 /* Managers */,
 				AC4B49912420EF0100C297B3 /* Models */,
 			);
@@ -88,8 +97,19 @@
 			children = (
 				AC4B49922420EF0700C297B3 /* Commit.swift */,
 				AC4B499424210A6D00C297B3 /* Contribution.swift */,
+				D38EEAEF24E2DE66004F0777 /* Repository.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		D38EEADD24E1828A004F0777 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				D38EEAE624E2D93C004F0777 /* FetchContributions.swift */,
+				D38EEAE824E2D943004F0777 /* PodUpdate.swift */,
+				D38EEAED24E2DDDB004F0777 /* ReposCommand.swift */,
+			);
+			path = Commands;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,7 +201,11 @@
 				AC4B498E2420E49600C297B3 /* CommandLineManager+Git.swift in Sources */,
 				AC4B49852420E45D00C297B3 /* main.swift in Sources */,
 				AC4B498F2420E49600C297B3 /* CommandLineManager.swift in Sources */,
+				D38EEAE724E2D93C004F0777 /* FetchContributions.swift in Sources */,
+				D38EEAEE24E2DDDB004F0777 /* ReposCommand.swift in Sources */,
+				D38EEAE924E2D943004F0777 /* PodUpdate.swift in Sources */,
 				AC4B499524210A6D00C297B3 /* Contribution.swift in Sources */,
+				D38EEAF024E2DE66004F0777 /* Repository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,10 +328,12 @@
 		AC4B49892420E45D00C297B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = X9253HG4XT;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -315,10 +341,12 @@
 		AC4B498A2420E45D00C297B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = X9253HG4XT;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -9,38 +9,43 @@
 import Foundation
 
 extension CommandLineManager {
-
-    private static let logSeparator = "|||||"
-
-    private enum Commands: CommandLineCommand {
-        case listRepo(path: String)
+    enum Commands: CommandLineCommand {
         case fetchAll(repoPath: String)
-        case listCommits(repoPath: String, sinceDate: String)
+        case switchBranch(repoPath: String, branch: String)
+        case updatePod(repoPath: String, name: String?)
 
         var stringValue: String {
             switch self {
-            case .listRepo(let path):
-                return "find \"$(cd \(path); pwd)\" -name \".git\""
             case .fetchAll(let path):
                 return "cd \"\(path)\"; git fetch --all &> /dev/null"
-            case .listCommits(let repoPath, let date):
-                return "cd \"\(repoPath)\"; git log --all --since \"\(date) 00:00:00\" --format=\"##%H\(logSeparator)%aN <%aE>\(logSeparator)%ai\" --shortstat"
+            case .switchBranch(let repoPath, let branch):
+                return "cd \"\(repoPath)\"; git switch \(branch)"
+            case .updatePod(let repoPath, let podName):
+                return "cd \"\(repoPath)\"; \(podName.map { "pod update \($0)" } ?? "pod update")"
             }
         }
     }
+    
+    @discardableResult func executeCommand(_ command: Commands) -> String {
+        executeCommand(command.stringValue)
+    }
+    
 
-    func listRepo(in path: String) -> [String] {
-        executeCommand(Commands.listRepo(path: path))
+    func listRepo(in path: String) -> [Repository] {
+        let command = "find \"$(cd \(path); pwd)\" -name \".git\""
+        return executeCommand(command)
             .components(separatedBy: .newlines)
-            .map { $0.replacingOccurrences(of: "/.git", with: "") }
+            .map {
+                let repoPath = $0.replacingOccurrences(of: "/.git", with: "")
+                let repoName = repoPath.components(separatedBy: "/").last
+                return Repository(name: repoName ?? repoPath, path: repoPath)
+        }
     }
 
-    func fetchAll(repoPath: String) {
-        executeCommand(Commands.fetchAll(repoPath: repoPath))
-    }
-
-    func listCommits(repoPath: String, since date: String) -> [Commit] {
-        return executeCommand(Commands.listCommits(repoPath: repoPath, sinceDate: date))
+    func listCommits(repo: Repository, since date: String) -> [Commit] {
+        let logSeparator = "|||||"
+        let command = "cd \"\(repo.path)\"; git log --all --since \"\(date) 00:00:00\" --format=\"##%H\(logSeparator)%aN <%aE>\(logSeparator)%ai\" --shortstat"
+        return executeCommand(command)
             .components(separatedBy: "##")
             .compactMap { rawCommit in
                 let components = rawCommit.components(separatedBy: "\n\n ")
@@ -49,7 +54,7 @@ extension CommandLineManager {
                     else {
                         return nil
                     }
-                let info = components[0].components(separatedBy: CommandLineManager.logSeparator)
+                let info = components[0].components(separatedBy: logSeparator)
                 guard
                     info.count == 3,
                     let commitDate = info[2].components(separatedBy: " ").first
@@ -60,8 +65,7 @@ extension CommandLineManager {
                     .components(separatedBy: ", ")
                     .compactMap { Int($0.components(separatedBy: " ").first ?? "") }
                     .reduce(0, +)
-                return Commit(hash: info[0], author: info[1], date: commitDate, changesCount: changesCount)
+                return Commit(app: repo.name, hash: info[0], author: info[1], date: commitDate, changesCount: changesCount)
             }
-
     }
 }
