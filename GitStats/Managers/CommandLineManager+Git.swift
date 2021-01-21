@@ -42,9 +42,9 @@ extension CommandLineManager {
         }
     }
 
-    func listCommits(repo: Repository, since date: String) -> [Commit] {
+    func listCommits(repo: Repository, from fromDate: String, to toDate: String) -> [Commit] {
         let logSeparator = "|||||"
-        let command = "cd \"\(repo.path)\"; git log --all --since \"\(date) 00:00:00\" --format=\"##%H\(logSeparator)%aN <%aE>\(logSeparator)%ai\" --shortstat"
+        let command = "cd \"\(repo.path)\"; git log --all --since \"\(fromDate) 00:00:00\" --until \"\(toDate) 00:00:00\" --format=\"##%H\(logSeparator)%aN <%aE>\(logSeparator)%ai\" --shortstat"
         return executeCommand(command)
             .components(separatedBy: "##")
             .compactMap { rawCommit in

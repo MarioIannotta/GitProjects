@@ -23,7 +23,11 @@ struct FetchContributions: ReposCommand {
     
     @Argument(default: makeTodayDate(),
               help: "The date from which you want to get the stats. Format: YYYY-MM-dd.")
-    var date: String
+    var fromDate: String
+    
+    @Argument(default: makeTodayDate(),
+              help: "The date until which you want to get the stats. Format: YYYY-MM-dd.")
+    var toDate: String
     
     @Option(name: .shortAndLong, default: false, help: "If the true, the remote fetch will be skipped.")
     var skipFetch: Bool
@@ -41,10 +45,10 @@ struct FetchContributions: ReposCommand {
         let commits = repos.enumerated()
             .flatMap { index, repo in
                 commandLineManager
-                    .listCommits(repo: repo, since: date)
+                    .listCommits(repo: repo, from: fromDate, to: toDate)
                 }
 
-        print("\n\(commits.count) commit found since \(date)")
+        print("\n\(commits.count) commit found from \(fromDate) to \(toDate)")
         return commits
     }
     
